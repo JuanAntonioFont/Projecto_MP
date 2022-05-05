@@ -68,9 +68,9 @@ bool peoInicial(ChessPosition pos)
 {
 	return (pos.getPosY() == 1) || (pos.getPosY() == 6);
 	//DESCRIPCIO;
-	//Aquesta funcio comprova si el peó seleccionat es pot moure dos espais endevant. Savent que els peons nomes es mouen endevant nomes ens cal comprovar
-	//si el peó es trova a la seva posico inicial. La disctincio entre blanques i negres ya es fa indirectament abans de cridar la funció.
-	//(sempre que es crida aquesta funcio sabem que el tipus de casella de la posicio evaluda es un peó)
+	//Aquesta funció comprova si el peó seleccionat es pot moure dos espais endavant. Sabent que els peons nomes es mouen endavant, nomes ens cal comprovar
+	//si el peó es trova a la seva posició inicial. La distincio entre blanques i negres ya es fa indirectament abans de cridar la funció.
+	//(sempre que es crida aquesta funcio sabem que el tipus de casella de la posicio avaluada es un peó)
 	// 
 	//PARAMETRES:
 	//Es pasa com a parametre la posicio del tauler a evaluar.
@@ -87,6 +87,8 @@ VecOfPositions Chessboard::GetValidMoves(const ChessPosition& pos) const
 	ChessPosition p;
 	int i, j;
 	bool b = false;
+
+
 	switch (tipus)
 	{
 	case CPT_King:
@@ -287,8 +289,8 @@ void Chessboard::comprovaHorVer(VecOfPositions& posicions, const ChessPosition& 
 	comprovacio(posicions, pos, color, 0, 1);
 	comprovacio(posicions, pos, color, 0, -1);
 	//DESCRIPCIO:
-	//Aquesra funcio comprova si les caselles al voltant de la peça seleccionada son valides. Nomes comprova les caselles en forma de + centrada a la posico que es pasa 
-	//con a parametre. Es comprova de forma radial en aquest ordre: esquerra, dreta, amunt, avall.
+	//Aquesta funcio comprova si les caselles al voltant de la peça seleccionada son valides. Nomes comprova les caselles en forma de + centrada a la posicio que es pasa 
+	//com a parametre. Es comprova de forma radial en aquest ordre: esquerra, dreta, amunt, avall.
 	//
 	//PARAMETRES:
 	//Es pasa com a parametre la posicio que s'ha d'evaluar, el vector de posicions per guardar les posicons valides i el color de la peça que s'evalua
@@ -305,7 +307,7 @@ void Chessboard::comprovaDiagonals(VecOfPositions& posicions, const ChessPositio
 	comprovacio(posicions, pos, color, 1, 1);
 	comprovacio(posicions, pos, color, 1, -1);
 	//DESCRIPCIO:
-	//Aquesra funcio comprova si les caselles al voltant de la peça seleccionada son valides. Nomes comprova les caselles en forma de x centrada a la posico que es pasa 
+	//Aquesta funcio comprova si les caselles al voltant de la peça seleccionada son valides. Nomes comprova les caselles en forma de x centrada a la posico que es pasa 
 	//con a parametre. Es comprova de forma radial en aquest ordre: dreta inferior, esquerra superior, esquerra inferior, dreta superior.
 	//
 	//PARAMETRES:
@@ -353,7 +355,7 @@ void Chessboard::comprovacio(VecOfPositions& posicions, const ChessPosition& pos
 	//
 	//PARAMETRES:
 	//Es pasa com a parametre la posicio que s'ha d'evaluar, el vector de posicions per guardar les posicons valides i el color de la peça que s'evalua
-	//Tambe es pasen dos valors mod_x i mod_y que indiquen si s'a de sumar, restar o no modificar els valors de x e y per la seguent iteracio.
+	//Tambe es pasen dos valors mod_x i mod_y que indiquen si s'ha de sumar, restar o no modificar els valors de x e y per la seguent iteracio.
 	// 
 	//RETORN:
 	//No es retorna res. La funcio modifica VecOfPositions de posicions valides directament.
@@ -384,10 +386,7 @@ void Chessboard::transformaPeo(ChessPosition p)
 		cout << "Cavall - C" << endl;
 		cout << "Introdueix lletra(MAJUSCULA): ";
 		cin >> tipus;
-		if (tipus >= 'a' || tipus <= 'z')
-		{
-			tipus += 'A';
-		}
+		
 		while (tipus!='D' && tipus!='T' && tipus!='A' && tipus!='C')
 		{
 			cout << "ERROR: Introdueix una lletra valida" << endl << endl;
@@ -397,10 +396,7 @@ void Chessboard::transformaPeo(ChessPosition p)
 			cout << "Cavall - C" << endl;
 			cout << "Introdueix lletra: ";
 			cin >> tipus;
-			if (tipus>='a'||tipus<='z')
-			{
-				tipus += 'A';
-			}
+
 		}
 		
 		m_board[p.getPosY()][p.getPosX()].setType(charToType(tipus));
@@ -408,10 +404,10 @@ void Chessboard::transformaPeo(ChessPosition p)
 
 	//DESCRIPCIO:
 	//
-	// Un peo pot cridar aquesta funcio per comprovar si ha arribat a l'altra banda del tauler i pot transformar-se en una altra peça.
+	// Un peo pot cridar aquesta funcio per comprovar si ha arribat a l'altra banda del tauler i transformar-se en una altra peça.
 	// 
 	//PARAMETRES:
-	//Es pasa com a parametre la posico del peo.
+	//Es pasa com a parametre la posició del peo.
 	// 
 	//RETORN:
 	//No es retorna res. La funcio tranforma el tipus de peça del peo si es nessecari.
@@ -448,17 +444,9 @@ bool Chessboard::MovePiece(const ChessPosition& posFrom, const ChessPosition& po
 
 string infoCasella(Piece p)
 {
-	string s;
-	s += p.getColorChar();
-	if (p.getType() !=CPT_EMPTY)
-	{
-		s += p.typeToChar();
-	}
-	else
-	{
-		s += '_';
-	}
-	
+	string s = p.getColorChar();
+	s += p.typeToChar();
+
 	return s;
 
 	//DESCRIPCIO:
@@ -466,7 +454,7 @@ string infoCasella(Piece p)
 	//{blanca => w  negra => b} seguida d'una lletra majuscula per al tipus {consultar la taula del guio}
 	//
 	//PARAMETRES:
-	//Es pasa com a paràmetre la peça a evaluar.
+	//Es pasa com a paràmetre la peça a avaluar.
 	//
 	//RETORN:
 	//Es retorna un string amb la informació de la peça.
