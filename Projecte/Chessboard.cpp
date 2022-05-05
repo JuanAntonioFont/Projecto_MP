@@ -64,15 +64,7 @@ void Chessboard::LoadBoardFromFile(const string& path)
 
 bool peoInicial(ChessPosition pos)  
 {
-	if (pos.getPosY()==1 )
-	{
-		return true;
-	}
-	if (pos.getPosY() == 6)
-	{
-		return true;
-	}
-	return false;
+	return (pos.getPosY() == 1) || (pos.getPosY() == 6);
 	//DESCRIPCIO;
 	//Aquesta funcio comprova si el peó seleccionat es pot moure dos espais endevant. Savent que els peons nomes es mouen endevant nomes ens cal comprovar
 	//si el peó es trova a la seva posico inicial. La disctincio entre blanques i negres ya es fa indirectament abans de cridar la funció.
