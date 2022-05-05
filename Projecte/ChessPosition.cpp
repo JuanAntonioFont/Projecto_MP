@@ -80,6 +80,12 @@ int CharToCol(char c)
     return c - 'a';
 }
 
+int CharToRow(char c)
+{
+    
+    return (c - 1 - '0');
+}
+
 
 ostream& operator<<(ostream& output, const ChessPosition& pos)
 {

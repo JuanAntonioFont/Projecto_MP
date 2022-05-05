@@ -35,5 +35,6 @@ private:
     
 };
 int CharToCol(char c);
+int CharToRow(char c);
 ostream& operator<<(ostream& output, const ChessPosition& pos);
 #endif /* ChessPosition_hpp */

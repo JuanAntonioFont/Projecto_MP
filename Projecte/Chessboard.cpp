@@ -12,7 +12,7 @@
 using namespace std;
 
 
-//Inicialització del tauler
+//Inicialització del tauler sense peçes 
 Chessboard::Chessboard()
 {
 	for (int i = 0; i < NUM_ROWS; i++)
@@ -41,9 +41,9 @@ void Chessboard::LoadBoardFromFile(const string& path)
 		ChessPieceType type;
 		if (!s.empty())
 		{
-			type = charToType(s[0]);
-			column = CharToCol(s[1]);
-			row = s[2]-1-'0';
+			type = charToType(s[0]); //mètode global de Piece
+			column = CharToCol(s[1]); //mètode global de ChessPosition
+			row = CharToRow(s[2]); //mètode global ChessPosition
 
 			m_board[row][column].setType(type);
 			if (player==0)
@@ -354,8 +354,8 @@ void Chessboard::comprovacio(VecOfPositions& posicions, const ChessPosition& pos
 	// de la recta.
 	//
 	//PARAMETRES:
-	//Es pasa com a parametre la posicio que s'ha d'evaluar, el vector de posicions per guardar les posicons valides i el color de la peça que s'evalua
-	//Tambe es pasen dos valors mod_x i mod_y que indiquen si s'ha de sumar, restar o no modificar els valors de x e y per la seguent iteracio.
+	//Es pasa com a parametre la posicio que s'ha d'evaluar, el vector de posicions per guardar les posicons valides i el color de la peça que s'avalua
+	//Tambe es pasen dos valors mod_x i mod_y que indiquen si s'ha de sumar, restar o no modificar els valors de x e y per la seguent iteració.
 	// 
 	//RETORN:
 	//No es retorna res. La funcio modifica VecOfPositions de posicions valides directament.
@@ -419,6 +419,8 @@ bool Chessboard::MovePiece(const ChessPosition& posFrom, const ChessPosition& po
 	VecOfPositions posicionsVal=GetValidMoves(posFrom);
 	bool posValida=false;
 	int i=0;
+
+	//Recorre el vector dels moviments vàlids d'una peça i compara amb la posició desitjada estí
 	while (posValida==false && i<posicionsVal.size())
 	{
 		if (posicionsVal[i]==posTo)
@@ -429,12 +431,14 @@ bool Chessboard::MovePiece(const ChessPosition& posFrom, const ChessPosition& po
 	}
 	if (posValida)
 	{
+		//Movem peça. Es donen els valors de color i tipus de posfrom a posTo i es deixa "en blanc" al posFrom
 		m_board[posTo.getPosY()][posTo.getPosX()].setColor(m_board[posFrom.getPosY()][posFrom.getPosX()].getColor());
 		m_board[posTo.getPosY()][posTo.getPosX()].setType(m_board[posFrom.getPosY()][posFrom.getPosX()].getType());
 
 		m_board[posFrom.getPosY()][posFrom.getPosX()].setColor(CPC_NONE);
 		m_board[posFrom.getPosY()][posFrom.getPosX()].setType(CPT_EMPTY);
 	}
+	//Si la peça es PEÓ em de comprovar si hem arribat al final del tauler per canviar la peça. Si es FALS no pasa res
 	if (m_board[posTo.getPosY()][posTo.getPosX()].getType()==CPT_Pawn)
 	{
 		transformaPeo(posTo);
@@ -465,7 +469,7 @@ string Chessboard::ToString() const
 	string s;
 	for (int i = NUM_ROWS-1; i >= 0; i--)
 	{
-		s += (char)i+48+1;
+		s += (char)i+48+1; //guardem els nums de 8-1 en chars ja que no podem emmagatzemar ints a l'string
 		for (int j = 0; j < NUM_COLS; j++)
 		{
 			s += " ";
