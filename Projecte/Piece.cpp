@@ -89,19 +89,4 @@ ChessPieceType charToType(char c)
 }
 
 
-/*string Piece::pieceToString(const Piece& p) const
-{
-	
-	string resultat;
-	char type;
-	resultat = p.getColorChar();
-	type = p.typeToChar();
 
-
-
-	resultat.push_back(type);
-
-	return resultat;
-
-}
-*/

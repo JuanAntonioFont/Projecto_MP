@@ -469,7 +469,7 @@ string Chessboard::ToString() const
 	string s;
 	for (int i = NUM_ROWS-1; i >= 0; i--)
 	{
-		s += (char)i+48+1; //guardem els nums de 8-1 en chars ja que no podem emmagatzemar ints a l'string
+		s += (char)i+48+1; //guardem els nums de 8-1 
 		for (int j = 0; j < NUM_COLS; j++)
 		{
 			s += " ";

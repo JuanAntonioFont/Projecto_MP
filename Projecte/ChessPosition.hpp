@@ -17,7 +17,7 @@ class ChessPosition {
 
 public:
     ChessPosition() { m_posX = 0; m_posY = 0; }
-    ChessPosition(string s) { m_posX = charToCol(s[0]); m_posY = s[1] - '0' - 1; }
+    ChessPosition(string s) { m_posX = charToCol(s[0]); m_posY = CharToRow(s[1]); }
     int getPosX() const{ return m_posX; }
     int getPosY() const{ return m_posY; } 
     void setPosX(int x) { m_posX = x; }

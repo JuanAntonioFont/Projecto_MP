@@ -39,12 +39,10 @@ public:
     void setType(ChessPieceType type) { m_type = type; }
     void setColor(ChessPieceColor color) { m_color = color; }
     ChessPieceColor getColor() const { return m_color; }
-    char getColorChar()const; //retorna el color com a char {Blanca => w, Negra => b} (per toString de chessboard)
-    int getColorInt()const; //retorna el color de la peça com a int {Blanca => 0, Negra => 1}
+    char getColorChar()const; //retorna el color com a char {Blanca => w, Negra => b} (per mètode toString de chessboard)
     ChessPieceType getType() const { return m_type; }
-    //char getTypeChar()const; //retorna el tipus de la peça com a char {consulta la taula del guio}
     char typeToChar()const; //retorna el caracter corresponent al tipus de la peça
-    //tring pieceToString(const Piece& p) const;  //retorna la peça com a string (color i tipus. EXEMPLE --> bD)
+
 
 
 private:
@@ -55,5 +53,5 @@ private:
     
 };
 
-ChessPieceType charToType(char c); //retorna el tipus de la peça corresponent al caracter del parametre
+ChessPieceType charToType(char c); //retorna el tipus de peça corresponent al caracter del parametre
 #endif /* Piece_hpp */
