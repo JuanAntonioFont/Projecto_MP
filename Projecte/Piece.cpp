@@ -13,17 +13,18 @@ using namespace std;
 char Piece::getColorChar() const
 {
 	char c='_';
-	if (m_color==CPC_White)
+	if (m_color == CPC_White)
 	{
 		c = 'w';
 	}
 	else
 	{
-		if (m_color==CPC_Black)
+		if (m_color == CPC_Black)
 		{
 			c = 'b';
 		}
 	}
+
 	return c;
 }
 
@@ -51,7 +52,7 @@ char Piece::typeToChar() const
 		c = 'P';
 		break;
 	default:
-		c = '-';
+		c = '_';
 		break;
 	}
 	return c;
@@ -86,3 +87,21 @@ ChessPieceType charToType(char c)
 	}
 	return t;
 }
+
+
+/*string Piece::pieceToString(const Piece& p) const
+{
+	
+	string resultat;
+	char type;
+	resultat = p.getColorChar();
+	type = p.typeToChar();
+
+
+
+	resultat.push_back(type);
+
+	return resultat;
+
+}
+*/

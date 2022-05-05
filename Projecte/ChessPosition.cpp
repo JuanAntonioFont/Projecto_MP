@@ -80,6 +80,7 @@ int CharToCol(char c)
     return c - 'a';
 }
 
+
 ostream& operator<<(ostream& output, const ChessPosition& pos)
 {
     char col = pos.ColToChar();

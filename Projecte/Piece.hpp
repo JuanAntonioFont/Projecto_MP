@@ -40,10 +40,13 @@ public:
     void setColor(ChessPieceColor color) { m_color = color; }
     ChessPieceColor getColor() const { return m_color; }
     char getColorChar()const; //retorna el color com a char {Blanca => w, Negra => b} (per toString de chessboard)
+    int getColorInt()const; //retorna el color de la peça com a int {Blanca => 0, Negra => 1}
     ChessPieceType getType() const { return m_type; }
-    int getTypeInt()const; //retorna el color de la peça com a int {Blanca => 0, Negra => 1}
     //char getTypeChar()const; //retorna el tipus de la peça com a char {consulta la taula del guio}
     char typeToChar()const; //retorna el caracter corresponent al tipus de la peça
+    //tring pieceToString(const Piece& p) const;  //retorna la peça com a string (color i tipus. EXEMPLE --> bD)
+
+
 private:
     ChessPieceType  m_type;
     ChessPieceColor m_color;

@@ -11,6 +11,8 @@
 
 using namespace std;
 
+
+//Inicialització del tauler
 Chessboard::Chessboard()
 {
 	for (int i = 0; i < NUM_ROWS; i++)
@@ -458,12 +460,13 @@ string infoCasella(Piece p)
 	}
 	
 	return s;
+
 	//DESCRIPCIO:
-	//La funcio recull la informació d'una casella i la transforma en un string que fara servir la funció toString. L'sring es composa d'una lletra minuscula per al color
-	//{blanca => w  negra => b} seguida d'una lletra majuscula per al tipus {consiltar la taula del guio}
+	//La funcio recull la informació d'una casella i la transforma en un string que fara servir la funció toString. L'string es composa d'una lletra minuscula per al color
+	//{blanca => w  negra => b} seguida d'una lletra majuscula per al tipus {consultar la taula del guio}
 	//
 	//PARAMETRES:
-	//Es pasa com a parametre la peça per evaluar.
+	//Es pasa com a paràmetre la peça a evaluar.
 	//
 	//RETORN:
 	//Es retorna un string amb la informació de la peça.
