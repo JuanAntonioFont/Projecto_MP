@@ -37,36 +37,7 @@ char ChessPosition::ColToChar() const
 {
     char col;
     col = m_posX + 'a';
-    /*switch (m_posX)
-    {
-    case 0:
-        col = 'a';
-        break;
-    case 1:
-        col = 'b';
-        break;
-    case 2:
-        col = 'c';
-        break;
-    case 3:
-        col = 'd';
-        break;
-    case 4:
-        col = 'e';
-        break;
-    case 5:
-        col = 'f';
-        break;
-    case 6:
-        col = 'g';
-        break;
-    case 7:
-        col = 'h';
-        break;
-    default:
-
-        break;
-    }*/
+   
     return col;
 }
 
@@ -79,6 +50,13 @@ int CharToCol(char c)
 {
     return c - 'a';
 }
+
+int CharToRow(char c)
+{
+    
+    return (c - 1 - '0');
+}
+
 
 ostream& operator<<(ostream& output, const ChessPosition& pos)
 {
