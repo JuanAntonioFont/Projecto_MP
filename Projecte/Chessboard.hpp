@@ -1,10 +1,3 @@
-//
-//  Chessboard.hpp
-//  LearnChess
-//
-//  Created by Enric Vergara on 21/2/22.
-//
-
 #ifndef Chessboard_hpp
 #define Chessboard_hpp
 

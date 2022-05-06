@@ -1,10 +1,3 @@
-//
-//  Piece.hpp
-//  LearnChess
-//
-//  Created by Enric Vergara on 21/2/22.
-//
-
 #ifndef Piece_hpp
 #define Piece_hpp
 
@@ -39,11 +32,12 @@ public:
     void setType(ChessPieceType type) { m_type = type; }
     void setColor(ChessPieceColor color) { m_color = color; }
     ChessPieceColor getColor() const { return m_color; }
-    char getColorChar()const; //retorna el color com a char {Blanca => w, Negra => b} (per toString de chessboard)
+    char getColorChar()const; //retorna el color com a char {Blanca => w, Negra => b} (per mÃ¨tode toString de chessboard)
     ChessPieceType getType() const { return m_type; }
-    int getTypeInt()const; //retorna el color de la peça com a int {Blanca => 0, Negra => 1}
-    //char getTypeChar()const; //retorna el tipus de la peça com a char {consulta la taula del guio}
-    char typeToChar()const; //retorna el caracter corresponent al tipus de la peça
+    char typeToChar()const; //retorna el caracter corresponent al tipus de la peÃ§a
+
+
+
 private:
     ChessPieceType  m_type;
     ChessPieceColor m_color;
@@ -52,5 +46,5 @@ private:
     
 };
 
-ChessPieceType charToType(char c); //retorna el tipus de la peça corresponent al caracter del parametre
+ChessPieceType charToType(char c); //retorna el tipus de peÃ§a corresponent al caracter del parametre
 #endif /* Piece_hpp */
