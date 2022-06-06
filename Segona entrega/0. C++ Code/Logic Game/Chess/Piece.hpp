@@ -34,16 +34,15 @@ public:
     ChessPieceColor getColor() const { return m_color; }
     char            getColorChar()const; //retorna el color com a char {Blanca => w, Negra => b} (per mètode toString de chessboard)
     ChessPieceType  getType() const { return m_type; }
+    bool            getValidPos() const { return m_validPos; }
+    void            setvalidPos(bool b) { m_validPos = b; }
     char            typeToChar()const; //retorna el caracter corresponent al tipus de la peça
 
     void            render(int posX, int posY);
-    int             getGraphicPosX(int i);  //retorna la posico X de la posicio i per utilitzar el GraphicManager
-    int             getGraphicPosY(int i);  //retorna la posico Y de la posicio i per utilitzar el GraphicManager
 private:
     ChessPieceType  m_type;
     ChessPieceColor m_color;
-    
-    
+    bool            m_validPos;
     
 };
 

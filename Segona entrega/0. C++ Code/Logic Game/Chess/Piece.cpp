@@ -58,9 +58,10 @@ char Piece::typeToChar() const
 	return c;
 }
 
+
 void Piece::render(int posX, int posY)
 {
-	if (m_type!=CPT_EMPTY)
+	/*if (m_type!=CPT_EMPTY)*/
 	{
 		IMAGE_NAME NAME;
 		ChessPieceColor color = m_color;
@@ -103,22 +104,26 @@ void Piece::render(int posX, int posY)
 				NAME = IMAGE_PIECE_PAWN_BLACK;
 			break;
 		default:
-			NAME = IMAGE_NUM_MAX;
+			if (m_validPos)
+			{
+				NAME = IMAGE_VALID_POS;
+			}
+			else
+			{
+				NAME = IMAGE_NUM_MAX;
+			}
+			
 			break;
 		}
 		GraphicManager::getInstance()->drawSprite(NAME, posX, posY);
+		if (m_validPos && m_type!=CPT_EMPTY)
+		{
+			GraphicManager::getInstance()->drawSprite(IMAGE_VALID_POS, posX, posY);
+		}
 	}
 }
 
-int Piece::getGraphicPosX(int i)
-{
-	return CELL_INIT_X+(i*CELL_W);
-}
 
-int Piece::getGraphicPosY(int i)
-{
-	return CELL_INIT_Y+(i*CELL_H);
-}
 
 ChessPieceType charToType(char c)
 {

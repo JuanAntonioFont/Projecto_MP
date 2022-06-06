@@ -19,16 +19,26 @@ public:
     string          ToString () const;
 
     ChessPieceColor GetPieceColorAtPos(const ChessPosition& pos) const;
-    ChessPieceType GetPieceTypeAtPos(const ChessPosition& pos) const;
+    ChessPieceType  GetPieceTypeAtPos(const ChessPosition& pos) const;
+    void            carregaPosValides(VecOfPositions v);
+    void            resetejaPosValides();
+    void            setPieceSeleccionada(ChessPosition p) { m_pieceSeleccionada.setPosX(p.getPosX()); m_pieceSeleccionada.setPosY(p.getPosY()); }
+    ChessPosition   getPieceSeleccionada() { return m_pieceSeleccionada; }const
+    bool            getPosValida(const ChessPosition p) { return m_board[p.getPosY()][p.getPosX()].getValidPos(); }const
+
     
-    void        render();
+    void            render();
+
 private:
     Piece m_board[NUM_COLS][NUM_ROWS];
+    ChessPosition m_pieceSeleccionada;
+
     void            comprovaHorVer(VecOfPositions& posicions, const ChessPosition& pos, ChessPieceColor color) const;
     void            comprovaDiagonals(VecOfPositions& posicions, const ChessPosition& pos, ChessPieceColor color) const;
     void            comprovacio(VecOfPositions& posicions, const ChessPosition& pos, ChessPieceColor color, int mod_x, int mod_y) const;
     void            transformaPeo(ChessPosition p);
 };
 
-
+int             getGraphicPosX(int i);  //retorna la posico X de la posicio i per utilitzar el GraphicManager
+int             getGraphicPosY(int i);  //retorna la posico Y de la posicio i per utilitzar el GraphicManager
 #endif /* Chessboard_hpp */

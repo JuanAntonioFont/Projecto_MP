@@ -14,6 +14,16 @@ using namespace std;
 
 
 //Inicialitzaci� del tauler sense pe�es 
+int getGraphicPosX(int i)
+{
+	return CELL_INIT_X + (i * CELL_W);
+}
+
+int getGraphicPosY(int i)
+{
+	return CELL_INIT_Y + (i * CELL_H);
+}
+
 Chessboard::Chessboard()
 {
 	for (int i = 0; i < NUM_ROWS; i++)
@@ -22,9 +32,13 @@ Chessboard::Chessboard()
 		{
 			m_board[i][j].setColor(CPC_NONE);
 			m_board[i][j].setType(CPT_EMPTY);
+			m_board[i][j].setvalidPos(false);
 
 		}
 	}
+
+	m_pieceSeleccionada.setPosX(-1);
+	m_pieceSeleccionada.setPosY(-1);
 }
 
 void Chessboard::LoadBoardFromFile(const string& path)
@@ -440,10 +454,10 @@ bool Chessboard::MovePiece(const ChessPosition& posFrom, const ChessPosition& po
 		m_board[posFrom.getPosY()][posFrom.getPosX()].setType(CPT_EMPTY);
 	}
 	//Si la pe�a es PE� em de comprovar si hem arribat al final del tauler per canviar la pe�a. Si es FALS no pasa res
-	if (m_board[posTo.getPosY()][posTo.getPosX()].getType()==CPT_Pawn)
+	/*if (m_board[posTo.getPosY()][posTo.getPosX()].getType()==CPT_Pawn)
 	{
 		transformaPeo(posTo);
-	}
+	}*/
 	return posValida;
 }
 
@@ -494,15 +508,33 @@ ChessPieceType Chessboard::GetPieceTypeAtPos(const ChessPosition& pos) const
 	return m_board[pos.getPosY()][pos.getPosX()].getType();
 }
 
-void Chessboard::render()
+void Chessboard::carregaPosValides(VecOfPositions v)
+{
+	for (int i = 0; i < NUM_ROWS; i++)
+	{
+		for (int j = 0; j < NUM_COLS; j++)
+			m_board[i][j].setvalidPos(false);
+	}
+	for (int i = 0; i < v.size(); i++)
+	{
+		m_board[v[i].getPosY()][v[i].getPosX()].setvalidPos(true);
+	}
+}
+
+const void Chessboard::render()
 {
 	for (int i = 0; i < NUM_ROWS; i++)
 	{
 		for (int j = 0; j < NUM_COLS; j++)
 		{
-			int posX = m_board[i][j].getGraphicPosX(i);
-			int posY = m_board[i][j].getGraphicPosY(j);
+			int posX = getGraphicPosX(i);
+			int posY = getGraphicPosY(7-j);
 			m_board[j][i].render(posX, posY);
 		}
 	}
+
 }
+
+
+
+
