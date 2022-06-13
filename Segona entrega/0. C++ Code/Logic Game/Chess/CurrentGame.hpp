@@ -32,4 +32,5 @@ private:
     Chessboard m_board;
 };
 
-#endif /* CurrentGame_hpp */
+#endif /* CurrentGame_hpp */ 
+//
