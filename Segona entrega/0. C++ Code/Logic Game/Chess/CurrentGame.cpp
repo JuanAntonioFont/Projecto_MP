@@ -8,7 +8,9 @@
 #include "CurrentGame.hpp"
 #include "GameInfo.h"
 #include "Chessboard.hpp"
+#include "QueueMovements.hpp"
 #include "../GraphicManager.h"
+#include <fstream>
 
 
 
@@ -21,12 +23,64 @@ CurrentGame::CurrentGame()
 void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const string& movementsFile)
 {
     m_board.LoadBoardFromFile(intitialBoardFile);
+    if (mode == GM_REPLAY)
+    {
+        //Creacio cua
+        QueueMovements cua;
+
+        
+        //Lectura arxiu MOVEMENTSFILE
+        ifstream file;
+        file.open(movementsFile);
+
+        while (!file.eof())
+        {
+            //Creacio "Movement" per guardar a cua
+            Movement mov;
+            //Variables per leectura arxius
+            string pos_Inicial, pos_Final;
+            char blank; //Espai en blanc
+            file >> pos_Inicial >> blank >> pos_Final  ;
+            int row, column;
+            if (!pos_Inicial.empty())
+            {
+                ChessPosition aux_from;
+                column = CharToCol(pos_Inicial[0]); //metode global de ChessPosition
+                row = CharToRow(pos_Inicial[1]); //metode global ChessPosition
+                aux_from.setPosX(column);
+                aux_from.setPosY(row);
+
+               
+                mov.setInicial(aux_from);
+
+                ChessPosition aux_to;
+                column = CharToCol(pos_Final[0]); //metode global de ChessPosition
+                row = CharToRow(pos_Final[1]); //metode global ChessPosition
+                aux_to.setPosX(column);
+                aux_to.setPosY(row);
+
+                mov.setFinal(aux_to);
+
+                //Agefim node (contingut: Moviment) a la cua
+                cua.afegeix(mov);
+
+            }
+
+    }
+    else
+    {
+        if (mode == GM_NORMAL)
+        {
+
+        }
+    }
+    
 }
 
 
 void CurrentGame::end()
 {
-
+    
 }
 
 bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus) 

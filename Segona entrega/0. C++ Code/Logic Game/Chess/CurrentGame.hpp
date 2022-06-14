@@ -12,6 +12,7 @@
 #include <string>
 #include "GameInfo.h"
 #include "Chessboard.hpp"
+#include "QueueMovements.hpp"
 
 using namespace std;
 
@@ -30,6 +31,9 @@ public:
     
 private:
     Chessboard m_board;
+    QueueMovements m_movements;
+    GameMode m_mode;
+    bool m_end;     //true si hem arribat al final de la partida
 };
 
 #endif /* CurrentGame_hpp */ 
