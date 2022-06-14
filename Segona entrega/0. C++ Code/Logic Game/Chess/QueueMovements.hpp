@@ -5,8 +5,6 @@ using namespace std;
 class Movement
 {
 public:
-	Movement();
-	~Movement();
 	void setInicial(const ChessPosition& inicial) { pos_inicial = inicial; }
 	void setFinal(const ChessPosition & final) { pos_final = final; }
 	ChessPosition& getInicial() { return pos_inicial ; }
@@ -19,13 +17,6 @@ private:
 	ChessPosition pos_final;
 };
 
-Movement::Movement()
-{
-}
-
-Movement::~Movement()
-{
-}
 
 
 class Node

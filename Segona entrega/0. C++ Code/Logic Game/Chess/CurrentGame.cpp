@@ -22,15 +22,15 @@ CurrentGame::CurrentGame()
 
 void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const string& movementsFile)
 {
-    //Creacio cua
-    QueueMovements cua;
+    m_mode = mode;
 
     m_board.LoadBoardFromFile(intitialBoardFile);
 
     if (mode == GM_REPLAY)
     {
         
-
+        //Creacio cua
+        QueueMovements _cua;
         
         //Lectura arxiu MOVEMENTSFILE
         ifstream file;
@@ -40,9 +40,11 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
         {
             //Creacio "Movement" per guardar a cua
             Movement mov;
+
             //Variables per leectura arxius
             string pos_Inicial, pos_Final;
             char blank; //Espai en blanc
+
             file >> pos_Inicial >> blank >> pos_Final;
             int row, column;
             if (!pos_Inicial.empty())
@@ -64,8 +66,8 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
 
                 mov.setFinal(aux_to);
 
-                //Agefim node (contingut: Moviment) a la cua
-                cua.afegeix(mov);
+                //Afegim node (contingut: objecte Movement) a la cua
+                _cua.afegeix(mov);
 
             }
             
@@ -75,27 +77,10 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
     {
         if (mode == GM_NORMAL)
         {
-            //Hay que poner bucle para comprobar SI HEMOS TERMINADO LA PARTIDA
-            
-            Movement aux;
-
-            //Opertura fitxer movementsFile
-            ofstream fitxer;
-            fitxer.open(movementsFile);
-
-            if (fitxer.is_open())
+            //Si ha finalitzat la partida
+            if (updateAndRender())
             {
-                while (!cua.esBuida())
-                {
-                    aux = cua.getPrimer();
-
-                    //Escriptura al fitxer movements File
-                    fitxer << (aux.getInicial()).toString() << " " << (aux.getFinal()).toString() << endl;
-
-                    //Eliminem Movement de la cua
-                    cua.treu();
-                }
-                fitxer.close();
+                end();
             }
         }
     }
@@ -105,9 +90,40 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
 
 void CurrentGame::end()
 {
-    
-    //Buidem la cua de moviments
-    ~QueueMovements();
+   
+    if (m_mode == GM_NORMAL)
+    {
+        Movement aux;
+        QueueMovements cua;
+
+        //Opertura fitxer movementsFile
+        ofstream fitxer;
+        fitxer.open(movementsFile);
+
+        if (fitxer.is_open())
+        {
+            while (!cua.esBuida())
+            {
+                aux = cua.getPrimer();
+
+                //Escriptura al fitxer movements File
+                fitxer << (aux.getInicial()).toString() << " " << (aux.getFinal()).toString() << endl;
+
+                //Eliminem Movement de la cua
+                cua.treu();
+            }
+            fitxer.close();
+        }
+    }
+    else
+    {
+        if (m_mode == GM_REPLAY)
+        {
+            //Buidem la cua de moviments        NO ESTOY SEGURA!!!!!!
+            //~QueueMovements();
+        }
+    }
+
 }
 
 bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus) 
