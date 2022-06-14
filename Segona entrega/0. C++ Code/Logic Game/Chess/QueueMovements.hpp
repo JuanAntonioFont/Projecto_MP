@@ -9,6 +9,8 @@ public:
 	~Movement();
 	void setInicial(const ChessPosition& inicial) { pos_inicial = inicial; }
 	void setFinal(const ChessPosition & final) { pos_final = final; }
+	ChessPosition& getInicial() { return pos_inicial ; }
+	ChessPosition& getFinal() { return pos_final ; }
 
 
 private:
@@ -42,7 +44,7 @@ class QueueMovements
 {
 public:
 	void afegeix(Movement& valor);
-	void treu();
+	void treu(); 
 	Movement& getPrimer() const { return m_primer->getValor(); }
 	Movement& getUltim() const { return m_ultim->getValor(); }
 	bool esBuida() const;

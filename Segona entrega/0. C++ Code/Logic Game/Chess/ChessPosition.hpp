@@ -34,6 +34,7 @@ private:
 
 int CharToCol(char c);
 int CharToRow(char c);
+string ToString()const;
 ostream& operator<<(ostream& output, const ChessPosition& pos);
 typedef vector<ChessPosition> VecOfPositions;
 #endif /* ChessPosition_hpp */

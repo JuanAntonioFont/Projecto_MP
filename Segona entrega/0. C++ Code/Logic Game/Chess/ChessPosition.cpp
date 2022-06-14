@@ -32,6 +32,18 @@ string ChessPosition::toString()const
 
 
 }
+string ToString()const
+{
+    string s;
+    s.resize(1);
+    char column = ColToChar();
+    char row = '0' + m_posY;
+    s[0] = column;
+    s[1] = row;
+    return s;
+
+
+}
 
 char ChessPosition::ColToChar() const
 {
