@@ -16,7 +16,9 @@
 
 CurrentGame::CurrentGame()
 {
-
+    m_mode = GM_NONE;
+    m_movements = QueueMovements();
+    m_board = Chessboard();
 }
 
 

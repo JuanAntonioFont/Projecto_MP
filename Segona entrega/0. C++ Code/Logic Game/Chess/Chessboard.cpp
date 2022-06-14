@@ -13,7 +13,7 @@
 using namespace std;
 
 
-//Inicialitzaci� del tauler sense pe�es 
+//Inicialitzacio del tauler sense peces 
 int getGraphicPosX(int i)
 {
 	return CELL_INIT_X + (i * CELL_W);
@@ -470,7 +470,7 @@ string infoCasella(Piece p)
 	return s;
 
 	//DESCRIPCIO:
-	//La funcio recull la informaci� d'una casella i la transforma en un string que fara servir la funci� toString. L'string es composa d'una lletra minuscula per al color
+	//La funcio recull la informaci� d'una casella i la transforma en un string que fara servir la funcio toString. L'string es composa d'una lletra minuscula per al color
 	//{blanca => w  negra => b} seguida d'una lletra majuscula per al tipus {consultar la taula del guio}
 	//
 	//PARAMETRES:
