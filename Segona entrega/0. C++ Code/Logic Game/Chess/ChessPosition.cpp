@@ -24,11 +24,11 @@
 string ChessPosition::toString()const
 {
     string s;
-    s.resize(1);
+    /*s.resize(1);*/
     char column=ColToChar();
     char row = '0' + m_posY;
-    s[0] = column;
-    s[1] = row;
+    s += column;
+    s += row;
     return s;
 
 
