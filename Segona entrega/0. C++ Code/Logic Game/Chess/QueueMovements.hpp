@@ -1,26 +1,33 @@
+#ifndef QueueMovements_hpp
+#define QueueMovements_hpp
+
+
 #include <iostream>
+#include"ChessPosition.hpp"
 using namespace std;
 
 
-class Movement
-{
+class Movement {
+
 public:
-	void setInicial(const ChessPosition& inicial) { pos_inicial = inicial; }
-	void setFinal(const ChessPosition & final) { pos_final = final; }
-	ChessPosition& getInicial() { return pos_inicial ; }
-	ChessPosition& getFinal() { return pos_final ; }
+	Movement();
+	Movement(ChessPosition inicial, ChessPosition posFinal) { m_inicial = inicial; m_final = posFinal; }
+	void setInicial(const ChessPosition& inicial) { m_inicial = inicial; }
+	void setFinal(const ChessPosition& posFinal) { m_final = posFinal; }
+	ChessPosition& getInicial() { return m_inicial ; }
+	ChessPosition& getFinal() { return m_final ; }
 
 
 private:
 	
-	ChessPosition pos_inicial;	//posicio peca
-	ChessPosition pos_final;
+	ChessPosition m_inicial;	//posicio peca
+	ChessPosition m_final;
 };
 
 
 
-class Node
-{
+class Node {
+
 public:
 	Movement& getValor() { return m_valor; }
 	Node* getNext() { return m_next; }
@@ -31,9 +38,11 @@ private:
 	Node* m_next;
 };
 
-class QueueMovements
-{
+class QueueMovements {
+
 public:
+	QueueMovements();
+	~QueueMovements();
 	void afegeix(Movement& valor);
 	void treu(); 
 	Movement& getPrimer() const { return m_primer->getValor(); }
@@ -45,74 +54,5 @@ private:
 };
 
 
-//CONSTRUCTOR
-QueueMovements::QueueMovements()
-{
-	m_primer = nullptr;
-	m_ultim = nullptr;
-}
 
-//DESTRUCTOR
-QueueMovements::~QueueMovements()
-{
-	Node* aux = m_primer;
-	Node* _aux;
-	while (aux != nullptr)
-	{
-		_aux = aux;
-		aux = aux->getNext();
-		delete _aux;
-	}
-}
-
-
-bool QueueMovements::esBuida() const
-{
-	bool buida = false;
-	if (m_primer == nullptr)
-	{
-		buida = true;
-	}
-
-	return buida;
-}
-
-void QueueMovements::afegeix(Movement& valor)
-{
-	Node* nou_node;
-	nou_node = new Node;
-	nou_node->setValor(valor);
-	nou_node->setNext(nullptr);
-	
-	if (esBuida())	//Si es el primer element de la cua
-	{
-		m_primer = nou_node;
-		m_ultim = nou_node;
-	}
-	else
-	{
-		m_ultim->setNext(nou_node);
-		m_ultim = nou_node;
-	}
-}
-
-
-void QueueMovements::treu()
-{
-	if (!esBuida())
-	{
-		Node* aux = m_primer;
-		
-		if (m_primer == m_ultim)
-		{
-			m_primer = nullptr;
-			m_ultim = nullptr;
-		}
-		else
-		{
-			m_primer = m_primer->getNext();
-		}
-		delete aux;
-	}
-}
-
+#endif // QueueMovements_hpp

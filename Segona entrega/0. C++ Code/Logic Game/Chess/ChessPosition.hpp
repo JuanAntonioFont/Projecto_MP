@@ -12,6 +12,7 @@ class ChessPosition {
 public:
     ChessPosition() { m_posX = 0; m_posY = 0; }
     ChessPosition(string s) { m_posX = charToCol(s[0]); m_posY = CharToRow(s[1]); }
+    ChessPosition(int x, int y) { m_posX = x; m_posY = y; }
     int getPosX() const{ return m_posX; }
     int getPosY() const{ return m_posY; } 
     void setPosX(int x) { m_posX = x; }
@@ -34,7 +35,7 @@ private:
 
 int CharToCol(char c);
 int CharToRow(char c);
-string ToString()const;
+string ToString();
 ostream& operator<<(ostream& output, const ChessPosition& pos);
 typedef vector<ChessPosition> VecOfPositions;
 #endif /* ChessPosition_hpp */

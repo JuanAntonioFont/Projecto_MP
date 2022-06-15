@@ -25,7 +25,7 @@ CurrentGame::CurrentGame()
 void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const string& movementsFile)
 {
     m_mode = mode;
-
+    m_movementsFile = movementsFile;
     m_board.LoadBoardFromFile(intitialBoardFile);
 
     if (mode == GM_REPLAY)
@@ -79,16 +79,49 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
     {
         if (mode == GM_NORMAL)
         {
+            m_torn = CPC_White;
             //Si ha finalitzat la partida
-            if (updateAndRender())
+
+           /* if (updateAndRender())
             {
                 end();
-            }
+            }*/
         }
     }
     
 }
 
+
+void CurrentGame::canviaTorn()
+{
+    if (m_torn==CPC_White)
+    {
+        m_torn = CPC_Black;
+    }
+    else
+    {
+        if (m_torn==CPC_Black)
+        {
+            m_torn = CPC_White;
+        }
+    }
+}
+
+bool CurrentGame::comprovaFinalPartida() const
+{
+    int comptaReis = 0;
+    for (int i = 0; i < NUM_ROWS; i++)
+    {
+        for (int j = 0; j < NUM_COLS; j++)
+        {
+            ChessPosition p(i, j);
+            if (m_board.GetPieceTypeAtPos(p) == CPT_King)
+                comptaReis++;
+        }
+    }
+
+    return comptaReis<2;
+}
 
 void CurrentGame::end()
 {
@@ -96,23 +129,22 @@ void CurrentGame::end()
     if (m_mode == GM_NORMAL)
     {
         Movement aux;
-        QueueMovements cua;
 
         //Opertura fitxer movementsFile
         ofstream fitxer;
-        fitxer.open(movementsFile);
+        fitxer.open(m_movementsFile);
 
         if (fitxer.is_open())
         {
-            while (!cua.esBuida())
+            while (!m_movements.esBuida())
             {
-                aux = cua.getPrimer();
+                aux = m_movements.getPrimer();
 
                 //Escriptura al fitxer movements File
                 fitxer << (aux.getInicial()).toString() << " " << (aux.getFinal()).toString() << endl;
 
                 //Eliminem Movement de la cua
-                cua.treu();
+                m_movements.treu();
             }
             fitxer.close();
         }
@@ -130,61 +162,114 @@ void CurrentGame::end()
 
 bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus) 
 {
+
     GraphicManager::getInstance()->drawSprite(IMAGE_BOARD, 0, 0);
     m_board.render();
 
+    // Texte del torn
+    int posTextX = CELL_INIT_X-20;
+    int posTextY = CELL_INIT_Y + (CELL_H * NUM_ROWS) + 140;
+    string s;
+
+    if (m_torn==CPC_Black)
+        s = "Black";
+    else
+        if (m_torn==CPC_White)
+            s = "White";
+  
+    std::string msg = "Turn: " + s;
+    GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX, posTextY, 1, msg);
+
+    //Texte del mode de joc
+    posTextY = CELL_INIT_Y + (CELL_H * NUM_ROWS) + 70;
+    if (m_mode == GM_NORMAL)
+        s = "Normal Play";
+    else
+    {
+        if (m_mode == GM_REPLAY)
+            s = "RePlay";
+    }
+        
+    msg = "Game Mode: " + s;
+    GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX, posTextY, 1, msg);
+
+
     if ((mousePosX >= CELL_INIT_X) && (mousePosY >= CELL_INIT_Y) &&
         (mousePosX <= (CELL_INIT_X + CELL_W * NUM_COLS)) &&
-        (mousePosY <= (CELL_INIT_Y + CELL_H * NUM_ROWS)))
+        (mousePosY <= (CELL_INIT_Y + CELL_H * NUM_ROWS))  && (!m_partidaFinalitzada))
     {
         int i = (mousePosX / CELL_W) -1, j =(((mousePosY / CELL_H) - 1) * -1) + 7;
-
-        int posTextX2 = CELL_INIT_X;
-        int posTextY2 = CELL_INIT_Y + (CELL_H * NUM_ROWS) + 80;
-        string si, sj;
-        si = i +'0';
-        sj = j + '0';
-        std::string msg = "PosX: " + si + ", PosY: " + sj;
-        GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX2, posTextY2, 0.8, msg);
-
-
-        ChessPosition pRat; //ChessPosition amb la posicio del ratoli
-        VecOfPositions v;
-        pRat.setPosX(i);
-        pRat.setPosY(j);
-        
-        if (mouseStatus)
+       
+        if (m_mode == GM_NORMAL)
         {
-            if (m_board.getPosValida(pRat))
-            {
-                m_board.MovePiece(m_board.getPieceSeleccionada(), pRat);
-                m_board.carregaPosValides(v);
-                
-            }
-            else
-            {
-                m_board.setPieceSeleccionada(pRat);
-                v = m_board.GetValidMoves(pRat);
-                m_board.carregaPosValides(v);
-            }
-            
-        }
+            ChessPosition pRat; //ChessPosition amb la posicio del ratoli
+            VecOfPositions v;
+            pRat.setPosX(i);
+            pRat.setPosY(j);
 
-        if (mouseStatus /*&& !(m_board.getPieceSeleccionada() == p)*/)
+            if (mouseStatus)
+            {
+                if (m_torn == m_board.GetPieceColorAtPos(pRat) || m_board.getPosValida(pRat))
+                {
+                    if (m_board.getPosValida(pRat))
+                    {
+                        m_board.MovePiece(m_board.getPieceSeleccionada(), pRat);
+                        Movement m(m_board.getPieceSeleccionada(), pRat);
+                        m_movements.afegeix(m);
+                        if (comprovaFinalPartida())
+                        {
+                            m_partidaFinalitzada = true;
+                        }
+                        m_board.carregaPosValides(v); // Com que v es buit, es resetejen les posicions valides
+                        canviaTorn();
+                    }
+                    m_board.setPieceSeleccionada(pRat);
+                    v = m_board.GetValidMoves(pRat);
+                    m_board.carregaPosValides(v);
+                }
+                else
+                {
+                    m_board.carregaPosValides(v);
+                }
+            }
+
+        }
+    }
+    if (m_partidaFinalitzada)
+    {
+        ChessPieceColor colorGuanyador=CPC_NONE;
+        int i = 0, j = 0;
+        while (colorGuanyador==CPC_NONE && i<NUM_ROWS)
         {
-            
+            j = 0;
+                while (colorGuanyador==CPC_NONE && j<NUM_COLS)
+                {
+                    ChessPosition p(i, j);
+                    if (m_board.GetPieceTypeAtPos(p)==CPT_King)
+                    {
+                        colorGuanyador = m_board.GetPieceColorAtPos(p);
+                    }
+                    j++;
+                }
+                i++;
         }
-
-        
+        posTextY = CELL_INIT_Y + (CELL_H * NUM_ROWS) + 200;
+        if (colorGuanyador == CPC_Black)
+            s = "Black";
+        else
+            if (colorGuanyador == CPC_White)
+                s = "White";
+        std::string msg = "Winner: " + s;
+        GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX, posTextY, 1, msg);
+        VecOfPositions vBuit;
+        m_board.carregaPosValides(vBuit);
     }
 
-    int posTextX = CELL_INIT_X;
-    int posTextY = CELL_INIT_Y + (CELL_H * NUM_ROWS) + 60;
-    std::string msg = "PosX: " + to_string(mousePosX) + ", PosY: " + to_string(mousePosY);
-    GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX, posTextY, 0.8, msg);
-
-
-    return false;
-
+    return m_partidaFinalitzada;
 }
+
+    
+
+
+    
 

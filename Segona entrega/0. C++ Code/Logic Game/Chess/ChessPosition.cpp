@@ -7,6 +7,7 @@
 
 #include "ChessPosition.hpp"
 #include "GameInfo.h"
+#include "Chessboard.hpp"
 
 /* Coordinate system:
     Y (rows)
@@ -32,18 +33,18 @@ string ChessPosition::toString()const
 
 
 }
-string ToString()const
-{
-    string s;
-    s.resize(1);
-    char column = ColToChar();
-    char row = '0' + m_posY;
-    s[0] = column;
-    s[1] = row;
-    return s;
-
-
-}
+//string ToString()
+//{
+//    string s;
+//    s.resize(1);
+//    char column = ColToChar();
+//    char row = '0' + m_posY;
+//    s[0] = column;
+//    s[1] = row;
+//    return s;
+//
+//
+//}
 
 char ChessPosition::ColToChar() const
 {

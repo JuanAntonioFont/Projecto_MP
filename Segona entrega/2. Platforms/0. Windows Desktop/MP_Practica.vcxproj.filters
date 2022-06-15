@@ -49,6 +49,9 @@
     <ClCompile Include="..\..\0. C++ Code\Logic Game\Chess\Piece.cpp">
       <Filter>Logic Game\Chess</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\0. C++ Code\Logic Game\Chess\QueueMovements.cpp">
+      <Filter>Logic Game\Chess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\0. C++ Code\Logic Game\GraphicManager.h">
@@ -109,6 +112,9 @@
       <Filter>Logic Game\Chess</Filter>
     </ClInclude>
     <ClInclude Include="..\..\0. C++ Code\Logic Game\Chess\Piece.hpp">
+      <Filter>Logic Game\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\0. C++ Code\Logic Game\Chess\QueueMovements.hpp">
       <Filter>Logic Game\Chess</Filter>
     </ClInclude>
   </ItemGroup>
