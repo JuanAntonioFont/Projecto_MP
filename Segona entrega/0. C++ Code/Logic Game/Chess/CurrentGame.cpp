@@ -80,12 +80,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
         if (mode == GM_NORMAL)
         {
             m_torn = CPC_White;
-            //Si ha finalitzat la partida
-
-           /* if (updateAndRender())
-            {
-                end();
-            }*/
+            
         }
     }
     
@@ -153,8 +148,8 @@ void CurrentGame::end()
     {
         if (m_mode == GM_REPLAY)
         {
-            //Buidem la cua de moviments        NO ESTOY SEGURA!!!!!!
-            //~QueueMovements();
+            
+            ~QueueMovements();
         }
     }
 
