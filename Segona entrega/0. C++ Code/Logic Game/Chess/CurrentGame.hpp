@@ -38,6 +38,7 @@ private:
     ChessPieceColor m_torn;
     bool m_partidaFinalitzada;
     string m_movementsFile;
+    int m_mouseStatusFrameCounter;
 };
 
 #endif /* CurrentGame_hpp */ 

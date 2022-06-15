@@ -25,8 +25,9 @@ CurrentGame::CurrentGame()
 void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const string& movementsFile)
 {
     m_mode = mode;
-    m_movementsFile = movementsFile;
+    m_torn = CPC_White;
     m_board.LoadBoardFromFile(intitialBoardFile);
+    m_mouseStatusFrameCounter = 0;
 
     if (mode == GM_REPLAY)
     {
@@ -79,8 +80,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
     {
         if (mode == GM_NORMAL)
         {
-            m_torn = CPC_White;
-            
+            m_movementsFile = movementsFile;
         }
     }
     
@@ -233,40 +233,59 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
         {
             if (mouseStatus)
             {
-                Movement m = m_movements.getPrimer();
-                ChessPosition posTo = m.getFinal(), posFrom = m.getInicial();
-                m_board.MovePiece(posFrom, posTo);
-                m_movements.treu();
+                if (m_mouseStatusFrameCounter<1 && !m_movements.esBuida())
+                {
+                    Movement m = m_movements.getPrimer();
+                    ChessPosition posTo = m.getFinal(), posFrom = m.getInicial();
+                    m_board.MovePiece(posFrom, posTo);
+                    canviaTorn();
+                    m_movements.treu();
+                    m_mouseStatusFrameCounter++;
+                }
+                
+                
             }
-           
+            if (m_mouseStatusFrameCounter > 0 && !mouseStatus)
+            {
+                m_mouseStatusFrameCounter = 0;
+            }
+            if (m_movements.esBuida())
+            {
+                m_partidaFinalitzada = true;
+            }
         }
     }
     if (m_partidaFinalitzada)
     {
-        ChessPieceColor colorGuanyador=CPC_NONE;
-        int i = 0, j = 0;
-        while (colorGuanyador==CPC_NONE && i<NUM_ROWS)
+        ChessPieceColor colorGuanyador = CPC_NONE;
+        int reis=0;
+        for (int i = 0; i < NUM_COLS; i++)
         {
-            j = 0;
-                while (colorGuanyador==CPC_NONE && j<NUM_COLS)
+            for (int j = 0; j < NUM_ROWS; j++)
+            {
+                ChessPosition p(i, j);
+                if (m_board.GetPieceTypeAtPos(p)==CPT_King)
                 {
-                    ChessPosition p(i, j);
-                    if (m_board.GetPieceTypeAtPos(p)==CPT_King)
-                    {
-                        colorGuanyador = m_board.GetPieceColorAtPos(p);
-                    }
-                    j++;
+                    colorGuanyador = m_board.GetPieceColorAtPos(p);
+                    reis++;
                 }
-                i++;
+            }
         }
+
         posTextY = CELL_INIT_Y + (CELL_H * NUM_ROWS) + 200;
-        if (colorGuanyador == CPC_Black)
-            s = "Black";
+        if (reis < 2)
+        {
+            if (colorGuanyador == CPC_Black)
+                s = "Winner: Black";
+            else
+                if (colorGuanyador == CPC_White)
+                    s = "Winner: White";
+        }
         else
-            if (colorGuanyador == CPC_White)
-                s = "White";
-        std::string msg = "Winner: " + s;
-        GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX, posTextY, 1, msg);
+            s = "No more moves to play";
+        
+        
+        GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX, posTextY, 1, s);
         VecOfPositions vBuit;
         m_board.carregaPosValides(vBuit);
     }
