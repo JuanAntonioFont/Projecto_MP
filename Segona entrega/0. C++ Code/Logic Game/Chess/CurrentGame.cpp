@@ -32,7 +32,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
     {
         
         //Creacio cua
-        QueueMovements _cua;
+        //QueueMovements _cua; //No hace falta
         
         //Lectura arxiu MOVEMENTSFILE
         ifstream file;
@@ -47,7 +47,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
             string pos_Inicial, pos_Final;
             char blank; //Espai en blanc
 
-            file >> pos_Inicial >> blank >> pos_Final;
+            file >> pos_Inicial >> pos_Final;
             int row, column;
             if (!pos_Inicial.empty())
             {
@@ -69,7 +69,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
                 mov.setFinal(aux_to);
 
                 //Afegim node (contingut: objecte Movement) a la cua
-                _cua.afegeix(mov);
+                m_movements.afegeix(mov);
 
             }
             
@@ -233,6 +233,17 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
                 }
             }
 
+        }
+        if (m_mode==GM_REPLAY)
+        {
+            if (mouseStatus)
+            {
+                Movement m = m_movements.getPrimer();
+                ChessPosition posTo = m.getFinal(), posFrom = m.getInicial();
+                m_board.MovePiece(posFrom, posTo);
+                m_movements.treu();
+            }
+           
         }
     }
     if (m_partidaFinalitzada)

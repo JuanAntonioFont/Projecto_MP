@@ -26,7 +26,7 @@ string ChessPosition::toString()const
     string s;
     /*s.resize(1);*/
     char column=ColToChar();
-    char row = '0' + m_posY;
+    char row = '1' + m_posY;
     s += column;
     s += row;
     return s;

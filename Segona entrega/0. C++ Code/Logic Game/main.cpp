@@ -42,7 +42,7 @@ int main(int argc, const char* argv[])
 	pantalla.show();
 
 	CurrentGame game;
-    game.init(GM_NORMAL, "data/Games/board.txt", "data/Games/movements.txt");
+    game.init(GM_REPLAY, "data/Games/board.txt", "data/Games/movements.txt");
 
     do
     {
