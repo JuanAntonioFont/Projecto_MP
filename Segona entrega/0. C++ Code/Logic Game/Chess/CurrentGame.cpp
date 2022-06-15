@@ -149,7 +149,7 @@ void CurrentGame::end()
         if (m_mode == GM_REPLAY)
         {
             
-            ~QueueMovements();
+           
         }
     }
 
