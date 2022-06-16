@@ -157,11 +157,12 @@ void CurrentGame::end()
 
 bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus) 
 {
-
+    // Mostra el tauler y les peçes
     GraphicManager::getInstance()->drawSprite(IMAGE_BOARD, 0, 0);
     m_board.render();
 
-    // Texte del torn
+    // Mostra el text de qui te el torn
+
     int posTextX = CELL_INIT_X-20;
     int posTextY = CELL_INIT_Y + (CELL_H * NUM_ROWS) + 140;
     string s;
@@ -175,7 +176,8 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
     std::string msg = "Turn: " + s;
     GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX, posTextY, 1, msg);
 
-    //Texte del mode de joc
+    //Mostra el text de en quin mode de joc estem
+
     posTextY = CELL_INIT_Y + (CELL_H * NUM_ROWS) + 70;
     if (m_mode == GM_NORMAL)
         s = "Normal Play";
@@ -188,75 +190,105 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
     msg = "Game Mode: " + s;
     GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX, posTextY, 1, msg);
 
-
+    // Comprovem si el ratoli esta dins dels limits del tauler
+     
     if ((mousePosX >= CELL_INIT_X) && (mousePosY >= CELL_INIT_Y) &&
         (mousePosX <= (CELL_INIT_X + CELL_W * NUM_COLS)) &&
         (mousePosY <= (CELL_INIT_Y + CELL_H * NUM_ROWS))  && (!m_partidaFinalitzada))
     {
-        int i = (mousePosX / CELL_W) -1, j =(((mousePosY / CELL_H) - 1) * -1) + 7;
        
+
+       // En mode normal
         if (m_mode == GM_NORMAL)
         {
-            ChessPosition pRat; //ChessPosition amb la posicio del ratoli
-            VecOfPositions v;
-            pRat.setPosX(i);
-            pRat.setPosY(j);
+            // Capturem la posició X e Y de la casella on es troba el ratoli
+            int mouseCellX = (mousePosX / CELL_W) - 1, mouseCellY = (((mousePosY / CELL_H) - 1) * -1) + 7;
 
+            ChessPosition pRat(mouseCellX, mouseCellY); //ChessPosition amb la posicio del ratoli
+            VecOfPositions v;                           // VecOfPositions amb posicions valides
+
+            // Comprovem si hem fet click
             if (mouseStatus)
             {
+                // Comrpbem si la casella on es fa click es del color de qui te el torn o si es una posico valida per moure la peça seleccionada
                 if (m_torn == m_board.GetPieceColorAtPos(pRat) || m_board.getPosValida(pRat))
                 {
+                    //Si es fa click a una posicio valida per moure la peça seleccionada
                     if (m_board.getPosValida(pRat))
                     {
+                        //Mou la peça
                         m_board.MovePiece(m_board.getPieceSeleccionada(), pRat);
+
+                        //Crea un Movement del moviment que s'acaba de fer y es guarda a m_movements
                         Movement m(m_board.getPieceSeleccionada(), pRat);
                         m_movements.afegeix(m);
+
+                        //Comprovem si s'ha acabar la partida
                         if (comprovaFinalPartida())
                         {
                             m_partidaFinalitzada = true;
                         }
-                        m_board.carregaPosValides(v); // Com que v es buit, es resetejen les posicions valides
+
+                        m_board.carregaPosValides(v); // En aquest punt v no conte cap posicio y per tant es buit, resetejant les posicions valides
                         canviaTorn();
                     }
+
+                    // Seleccionem la peça de la casella on s'ha fet click i guardem les posicions valides on es pot moure en v
                     m_board.setPieceSeleccionada(pRat);
                     v = m_board.GetValidMoves(pRat);
+
+                    // Carreguem les posicions valides a m_board (aixó ens mostrara els quadrats verds quan es cridi al render de pice)
                     m_board.carregaPosValides(v);
                 }
+                // Si es fa click en una posicio que no sigui del color de qui te el torn ni una posicio valida
                 else
                 {
+                    // Carrega v (que en aquest punt esta buit) resetejant les posicions valides
                     m_board.carregaPosValides(v);
                 }
             }
 
         }
+        // En mode replay
         if (m_mode==GM_REPLAY)
         {
+            // Si es fa click
             if (mouseStatus)
             {
+                //Comprovem que m_movements no sigui buida i evitem entrar al if mentre el ratoli continui apretat (comptem les vegades que es pasa per
+                //updateAndRender mentre mouseStatus=true)
                 if (m_mouseStatusFrameCounter<1 && !m_movements.esBuida())
                 {
+                    //Extreiem les posicions de m_movements i efectuem el moviment
                     Movement m = m_movements.getPrimer();
                     ChessPosition posTo = m.getFinal(), posFrom = m.getInicial();
                     m_board.MovePiece(posFrom, posTo);
                     canviaTorn();
+                    // Treiem el moviment de m_movements i incrementem el comptador
                     m_movements.treu();
                     m_mouseStatusFrameCounter++;
                 }
                 
                 
             }
+            //Si el comtador no es 0 i s'ha deixat de fer click resetejem el comptador
             if (m_mouseStatusFrameCounter > 0 && !mouseStatus)
             {
                 m_mouseStatusFrameCounter = 0;
             }
+
+            //Quan m_movements sigui buida acabem la partida
             if (m_movements.esBuida())
             {
                 m_partidaFinalitzada = true;
             }
         }
     }
+
+    //Si la partida ha finalitzat
     if (m_partidaFinalitzada)
     {
+        //Comptem els reis que hi ha al tauler guardant el color de l'ultim que hem trobat
         ChessPieceColor colorGuanyador = CPC_NONE;
         int reis=0;
         for (int i = 0; i < NUM_COLS; i++)
@@ -273,6 +305,8 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
         }
 
         posTextY = CELL_INIT_Y + (CELL_H * NUM_ROWS) + 200;
+
+        // Si hi ha menys de 2 reis, el color del rei que hi ha al tauler es el jugador guanyador
         if (reis < 2)
         {
             if (colorGuanyador == CPC_Black)
@@ -281,15 +315,18 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
                 if (colorGuanyador == CPC_White)
                     s = "Winner: White";
         }
+        //Si hi ha 2 (o mes), sabent que la partida ha acabat podem dir que estem a GM_REPLAY i m_movemets es buida
         else
             s = "No more moves to play";
         
         
         GraphicManager::getInstance()->drawFont(FONT_RED_30, posTextX, posTextY, 1, s);
+
+        // resetejem les posicions valides per treure cualsevol quadrat verd que pugi quedar
         VecOfPositions vBuit;
         m_board.carregaPosValides(vBuit);
     }
-
+    //Retornem si la partida ha acabat
     return m_partidaFinalitzada;
 }
 
