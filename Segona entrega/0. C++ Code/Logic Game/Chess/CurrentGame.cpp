@@ -17,7 +17,6 @@
 CurrentGame::CurrentGame()
 {
     m_mode = GM_NONE;
-    m_movements = QueueMovements();
     m_board = Chessboard();
 }
 
@@ -32,8 +31,6 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
     if (mode == GM_REPLAY)
     {
         
-        //Creacio cua
-        //QueueMovements _cua; //No hace falta
         
         //Lectura arxiu MOVEMENTSFILE
         ifstream file;
@@ -44,22 +41,24 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
             //Creacio "Movement" per guardar a cua
             Movement mov;
 
-            //Variables per leectura arxius
+            //Variables per lectura arxius
             string pos_Inicial, pos_Final;
-            char blank; //Espai en blanc
 
+            //Lectura arxiu
             file >> pos_Inicial >> pos_Final;
+
+
             int row, column;
-            if (!pos_Inicial.empty())
+            if (!pos_Inicial.empty())   //Comprovacio arxiu no √©s buit
             {
                 ChessPosition aux_from;
-                column = CharToCol(pos_Inicial[0]); //metode global de ChessPosition
-                row = CharToRow(pos_Inicial[1]); //metode global ChessPosition
-                aux_from.setPosX(column);
-                aux_from.setPosY(row);
+                column = CharToCol(pos_Inicial[0]); //Conversio char del string en numero (metode global de ChessPosition)
+                row = CharToRow(pos_Inicial[1]); //Conversio char del string en numero (metode global ChessPosition)
+                aux_from.setPosX(column); //Assignacio valor de la columna   
+                aux_from.setPosY(row); //Assignacio valor de la fila
 
 
-                mov.setInicial(aux_from);
+                mov.setInicial(aux_from);   //Asignaci√≥ valor del atribut setInicial (classe Movement)
                 
                 ChessPosition aux_to;
                 column = CharToCol(pos_Final[0]); //metode global de ChessPosition
@@ -67,7 +66,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
                 aux_to.setPosX(column);
                 aux_to.setPosY(row);
 
-                mov.setFinal(aux_to);
+                mov.setFinal(aux_to);   //Asignaci√≥ valor del atribut setFinal (classe Movement)
 
                 //Afegim node (contingut: objecte Movement) a la cua
                 m_movements.afegeix(mov);
@@ -131,9 +130,9 @@ void CurrentGame::end()
 
         if (fitxer.is_open())
         {
-            while (!m_movements.esBuida())
+            while (!m_movements.esBuida())  //Comprovaci√≥ cua es buida
             {
-                aux = m_movements.getPrimer();
+                aux = m_movements.getPrimer();  //Guardem valor del primer node (== Movement)
 
                 //Escriptura al fitxer movements File
                 fitxer << (aux.getInicial()).toString() << " " << (aux.getFinal()).toString() << endl;
@@ -144,20 +143,14 @@ void CurrentGame::end()
             fitxer.close();
         }
     }
-    else
-    {
-        if (m_mode == GM_REPLAY)
-        {
-            
-           
-        }
-    }
+
+    ~QueueMovements();  //Eliminem cua per a la nova partida 
 
 }
 
 bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus) 
 {
-    // Mostra el tauler y les peÁes
+    // Mostra el tauler y les pe√ßes
     GraphicManager::getInstance()->drawSprite(IMAGE_BOARD, 0, 0);
     m_board.render();
 
@@ -201,7 +194,7 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
        // En mode normal
         if (m_mode == GM_NORMAL)
         {
-            // Capturem la posiciÛ X e Y de la casella on es troba el ratoli
+            // Capturem la posici√≥ X e Y de la casella on es troba el ratoli
             int mouseCellX = (mousePosX / CELL_W) - 1, mouseCellY = (((mousePosY / CELL_H) - 1) * -1) + 7;
 
             ChessPosition pRat(mouseCellX, mouseCellY); //ChessPosition amb la posicio del ratoli
@@ -210,13 +203,13 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
             // Comprovem si hem fet click
             if (mouseStatus)
             {
-                // Comrpbem si la casella on es fa click es del color de qui te el torn o si es una posico valida per moure la peÁa seleccionada
+                // Comrpbem si la casella on es fa click es del color de qui te el torn o si es una posico valida per moure la pe√ßa seleccionada
                 if (m_torn == m_board.GetPieceColorAtPos(pRat) || m_board.getPosValida(pRat))
                 {
-                    //Si es fa click a una posicio valida per moure la peÁa seleccionada
+                    //Si es fa click a una posicio valida per moure la pe√ßa seleccionada
                     if (m_board.getPosValida(pRat))
                     {
-                        //Mou la peÁa
+                        //Mou la pe√ßa
                         m_board.MovePiece(m_board.getPieceSeleccionada(), pRat);
 
                         //Crea un Movement del moviment que s'acaba de fer y es guarda a m_movements
@@ -233,11 +226,11 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
                         canviaTorn();
                     }
 
-                    // Seleccionem la peÁa de la casella on s'ha fet click i guardem les posicions valides on es pot moure en v
+                    // Seleccionem la pe√ßa de la casella on s'ha fet click i guardem les posicions valides on es pot moure en v
                     m_board.setPieceSeleccionada(pRat);
                     v = m_board.GetValidMoves(pRat);
 
-                    // Carreguem les posicions valides a m_board (aixÛ ens mostrara els quadrats verds quan es cridi al render de pice)
+                    // Carreguem les posicions valides a m_board (aix√≥ ens mostrara els quadrats verds quan es cridi al render de pice)
                     m_board.carregaPosValides(v);
                 }
                 // Si es fa click en una posicio que no sigui del color de qui te el torn ni una posicio valida
