@@ -21,7 +21,6 @@ public:
     ChessPieceColor GetPieceColorAtPos(const ChessPosition& pos) const;
     ChessPieceType  GetPieceTypeAtPos(const ChessPosition& pos) const;
     void            carregaPosValides(VecOfPositions v);
-    void            resetejaPosValides();
     void            setPieceSeleccionada(ChessPosition p) { m_pieceSeleccionada.setPosX(p.getPosX()); m_pieceSeleccionada.setPosY(p.getPosY()); }
     ChessPosition   getPieceSeleccionada() { return m_pieceSeleccionada; }const
     bool            getPosValida(const ChessPosition p) { return m_board[p.getPosY()][p.getPosX()].getValidPos(); }const
@@ -31,7 +30,7 @@ public:
 
 private:
     Piece m_board[NUM_COLS][NUM_ROWS];
-    ChessPosition m_pieceSeleccionada;
+    ChessPosition m_pieceSeleccionada;      //Posicio de la peça on s'ha fet click
 
     void            comprovaHorVer(VecOfPositions& posicions, const ChessPosition& pos, ChessPieceColor color) const;
     void            comprovaDiagonals(VecOfPositions& posicions, const ChessPosition& pos, ChessPieceColor color) const;

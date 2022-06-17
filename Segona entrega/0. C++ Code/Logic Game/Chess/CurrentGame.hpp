@@ -36,9 +36,9 @@ private:
     QueueMovements m_movements;
     GameMode m_mode;
     ChessPieceColor m_torn;
-    bool m_partidaFinalitzada;
-    string m_movementsFile;
-    int m_mouseStatusFrameCounter;
+    bool m_partidaFinalitzada;      //True si la partida ha acabat
+    string m_movementsFile;         //Guarda el fitxer on s'han de guardar els moviments
+    int m_mouseStatusFrameCounter;  //Compta les vegades que s'ha executat updateAndRender mentre el ratoli estaba apretat
 };
 
 #endif /* CurrentGame_hpp */ 
