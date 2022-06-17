@@ -58,7 +58,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
                 aux_from.setPosY(row); //Assignacio valor de la fila
 
 
-                mov.setInicial(aux_from);   //Asignaci� valor del atribut setInicial (classe Movement)
+                mov.setInicial(aux_from);   //Assignacio valor del atribut setInicial (classe Movement)
                 
                 ChessPosition aux_to;
                 column = CharToCol(pos_Final[0]); //metode global de ChessPosition
@@ -66,7 +66,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
                 aux_to.setPosX(column);
                 aux_to.setPosY(row);
 
-                mov.setFinal(aux_to);   //Asignaci� valor del atribut setFinal (classe Movement)
+                mov.setFinal(aux_to);   //Assignacio valor del atribut setFinal (classe Movement)
 
                 //Afegim node (contingut: objecte Movement) a la cua
                 m_movements.afegeix(mov);
@@ -130,11 +130,11 @@ void CurrentGame::end()
 
         if (fitxer.is_open())
         {
-            while (!m_movements.esBuida())  //Comprovaci� cua es buida
+            while (!m_movements.esBuida())  //Comprovacio cua es buida
             {
                 aux = m_movements.getPrimer();  //Guardem valor del primer node (== Movement)
 
-                //Escriptura al fitxer movements File
+                //Escriptura al fitxer movementsFile
                 fitxer << (aux.getInicial()).toString() << " " << (aux.getFinal()).toString() << endl;
 
                 //Eliminem Movement de la cua
@@ -148,7 +148,7 @@ void CurrentGame::end()
 
 bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus) 
 {
-    // Mostra el tauler y les pe�es
+    // Mostra el tauler y les peces
     GraphicManager::getInstance()->drawSprite(IMAGE_BOARD, 0, 0);
     m_board.render();
 
