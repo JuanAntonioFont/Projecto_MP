@@ -17,7 +17,6 @@
 CurrentGame::CurrentGame()
 {
     m_mode = GM_NONE;
-    m_movements = QueueMovements();
     m_board = Chessboard();
 }
 
@@ -31,8 +30,6 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
     if (mode == GM_REPLAY)
     {
         
-        //Creacio cua
-        //QueueMovements _cua; //No hace falta
         
         //Lectura arxiu MOVEMENTSFILE
         ifstream file;
@@ -43,22 +40,24 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
             //Creacio "Movement" per guardar a cua
             Movement mov;
 
-            //Variables per leectura arxius
+            //Variables per lectura arxius
             string pos_Inicial, pos_Final;
-            char blank; //Espai en blanc
 
+            //Lectura arxiu
             file >> pos_Inicial >> pos_Final;
+
+
             int row, column;
-            if (!pos_Inicial.empty())
+            if (!pos_Inicial.empty())   //Comprovacio arxiu no és buit
             {
                 ChessPosition aux_from;
                 column = CharToCol(pos_Inicial[0]); //metode global de ChessPosition
                 row = CharToRow(pos_Inicial[1]); //metode global ChessPosition
-                aux_from.setPosX(column);
+                aux_from.setPosX(column);   
                 aux_from.setPosY(row);
 
 
-                mov.setInicial(aux_from);
+                mov.setInicial(aux_from);   //Asignació valor atribut setInicial (classe Movement)
                 
                 ChessPosition aux_to;
                 column = CharToCol(pos_Final[0]); //metode global de ChessPosition
@@ -66,7 +65,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
                 aux_to.setPosX(column);
                 aux_to.setPosY(row);
 
-                mov.setFinal(aux_to);
+                mov.setFinal(aux_to);   //Asignació valor atribut setFinal (classe Movement)
 
                 //Afegim node (contingut: objecte Movement) a la cua
                 m_movements.afegeix(mov);
@@ -131,9 +130,9 @@ void CurrentGame::end()
 
         if (fitxer.is_open())
         {
-            while (!m_movements.esBuida())
+            while (!m_movements.esBuida())  //Comprovació cua es buida
             {
-                aux = m_movements.getPrimer();
+                aux = m_movements.getPrimer();  //Guardem valor del primer node (== Movement)
 
                 //Escriptura al fitxer movements File
                 fitxer << (aux.getInicial()).toString() << " " << (aux.getFinal()).toString() << endl;
@@ -144,14 +143,7 @@ void CurrentGame::end()
             fitxer.close();
         }
     }
-    else
-    {
-        if (m_mode == GM_REPLAY)
-        {
-            
-            ~QueueMovements();
-        }
-    }
+    ~QueueMovements();  //Eliminem cua per a la nova partida 
 
 }
 
