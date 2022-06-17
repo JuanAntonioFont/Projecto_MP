@@ -42,7 +42,7 @@ public:
 private:
     ChessPieceType  m_type;
     ChessPieceColor m_color;
-    bool            m_validPos;
+    bool            m_validPos; //True si la peça seleccionada es pot moure a aquesta posicio(mostra en quadrat verd)
     
 };
 

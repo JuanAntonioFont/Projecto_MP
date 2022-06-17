@@ -61,66 +61,62 @@ char Piece::typeToChar() const
 
 void Piece::render(int posX, int posY)
 {
-	/*if (m_type!=CPT_EMPTY)*/
+	
+	IMAGE_NAME NAME;
+	ChessPieceColor color = m_color;
+	switch (m_type)
 	{
-		IMAGE_NAME NAME;
-		ChessPieceColor color = m_color;
-		switch (m_type)
-		{
-		case CPT_King:
-			if (color == CPC_White)
-				NAME = IMAGE_PIECE_KING_WHITE;
-			else
-				NAME = IMAGE_PIECE_KING_BLACK;
-			break;
-		case CPT_Queen:
-			if (color == CPC_White)
-				NAME = IMAGE_PIECE_QUEEN_WHITE;
-			else
-				NAME = IMAGE_PIECE_QUEEN_BLACK;
-			break;
-		case CPT_Rook:
-			if (color == CPC_White)
-				NAME = IMAGE_PIECE_ROOK_WHITE;
-			else
-				NAME = IMAGE_PIECE_ROOK_BLACK;
-			break;
-		case CPT_Bishop:
-			if (color == CPC_White)
-				NAME = IMAGE_PIECE_BISHOP_WHITE;
-			else
-				NAME = IMAGE_PIECE_BISHOP_BLACK;
-			break;
-		case CPT_Knight:
-			if (color == CPC_White)
-				NAME = IMAGE_PIECE_KNIGHT_WHITE;
-			else
-				NAME = IMAGE_PIECE_KNIGHT_BLACK;
-			break;
-		case CPT_Pawn:
-			if (color == CPC_White)
-				NAME = IMAGE_PIECE_PAWN_WHITE;
-			else
-				NAME = IMAGE_PIECE_PAWN_BLACK;
-			break;
-		default:
-			if (m_validPos)
-			{
-				NAME = IMAGE_VALID_POS;
-			}
-			else
-			{
-				NAME = IMAGE_NUM_MAX;
-			}
-			
-			break;
-		}
-		GraphicManager::getInstance()->drawSprite(NAME, posX, posY);
-		if (m_validPos && m_type!=CPT_EMPTY)
-		{
-			GraphicManager::getInstance()->drawSprite(IMAGE_VALID_POS, posX, posY);
-		}
+	case CPT_King:
+		if (color == CPC_White)
+			NAME = IMAGE_PIECE_KING_WHITE;
+		else
+			NAME = IMAGE_PIECE_KING_BLACK;
+		break;
+	case CPT_Queen:
+		if (color == CPC_White)
+			NAME = IMAGE_PIECE_QUEEN_WHITE;
+		else
+			NAME = IMAGE_PIECE_QUEEN_BLACK;
+		break;
+	case CPT_Rook:
+		if (color == CPC_White)
+			NAME = IMAGE_PIECE_ROOK_WHITE;
+		else
+			NAME = IMAGE_PIECE_ROOK_BLACK;
+		break;
+	case CPT_Bishop:
+		if (color == CPC_White)
+			NAME = IMAGE_PIECE_BISHOP_WHITE;
+		else
+			NAME = IMAGE_PIECE_BISHOP_BLACK;
+		break;
+	case CPT_Knight:
+		if (color == CPC_White)
+			NAME = IMAGE_PIECE_KNIGHT_WHITE;
+		else
+			NAME = IMAGE_PIECE_KNIGHT_BLACK;
+		break;
+	case CPT_Pawn:
+		if (color == CPC_White)
+			NAME = IMAGE_PIECE_PAWN_WHITE;
+		else
+			NAME = IMAGE_PIECE_PAWN_BLACK;
+		break;
+	default:
+		NAME = IMAGE_NUM_MAX;	
+		break;
 	}
+	if (NAME!=IMAGE_NUM_MAX)
+	{
+		GraphicManager::getInstance()->drawSprite(NAME, posX, posY);
+	}
+
+	//Si es una posicio valida, posem el quadrat verd
+	if (m_validPos)
+	{
+		GraphicManager::getInstance()->drawSprite(IMAGE_VALID_POS, posX, posY);
+	}
+	
 }
 
 
