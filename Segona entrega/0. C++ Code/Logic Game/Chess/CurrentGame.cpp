@@ -49,7 +49,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
 
 
             int row, column;
-            if (!pos_Inicial.empty())   //Comprovacio arxiu no és buit
+            if (!pos_Inicial.empty())   //Comprovacio arxiu no �s buit
             {
                 ChessPosition aux_from;
                 column = CharToCol(pos_Inicial[0]); //Conversio char del string en numero (metode global de ChessPosition)
@@ -58,7 +58,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
                 aux_from.setPosY(row); //Assignacio valor de la fila
 
 
-                mov.setInicial(aux_from);   //Asignació valor del atribut setInicial (classe Movement)
+                mov.setInicial(aux_from);   //Asignaci� valor del atribut setInicial (classe Movement)
                 
                 ChessPosition aux_to;
                 column = CharToCol(pos_Final[0]); //metode global de ChessPosition
@@ -66,7 +66,7 @@ void CurrentGame::init(GameMode mode, const string& intitialBoardFile, const str
                 aux_to.setPosX(column);
                 aux_to.setPosY(row);
 
-                mov.setFinal(aux_to);   //Asignació valor del atribut setFinal (classe Movement)
+                mov.setFinal(aux_to);   //Asignaci� valor del atribut setFinal (classe Movement)
 
                 //Afegim node (contingut: objecte Movement) a la cua
                 m_movements.afegeix(mov);
@@ -130,7 +130,7 @@ void CurrentGame::end()
 
         if (fitxer.is_open())
         {
-            while (!m_movements.esBuida())  //Comprovació cua es buida
+            while (!m_movements.esBuida())  //Comprovaci� cua es buida
             {
                 aux = m_movements.getPrimer();  //Guardem valor del primer node (== Movement)
 
@@ -144,13 +144,11 @@ void CurrentGame::end()
         }
     }
 
-    ~QueueMovements();  //Eliminem cua per a la nova partida 
-
 }
 
 bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus) 
 {
-    // Mostra el tauler y les peçes
+    // Mostra el tauler y les pe�es
     GraphicManager::getInstance()->drawSprite(IMAGE_BOARD, 0, 0);
     m_board.render();
 
@@ -194,7 +192,7 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
        // En mode normal
         if (m_mode == GM_NORMAL)
         {
-            // Capturem la posició X e Y de la casella on es troba el ratoli
+            // Capturem la posici� X e Y de la casella on es troba el ratoli
             int mouseCellX = (mousePosX / CELL_W) - 1, mouseCellY = (((mousePosY / CELL_H) - 1) * -1) + 7;
 
             ChessPosition pRat(mouseCellX, mouseCellY); //ChessPosition amb la posicio del ratoli
@@ -203,13 +201,13 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
             // Comprovem si hem fet click
             if (mouseStatus)
             {
-                // Comrpbem si la casella on es fa click es del color de qui te el torn o si es una posico valida per moure la peça seleccionada
+                // Comrpbem si la casella on es fa click es del color de qui te el torn o si es una posico valida per moure la pe�a seleccionada
                 if (m_torn == m_board.GetPieceColorAtPos(pRat) || m_board.getPosValida(pRat))
                 {
-                    //Si es fa click a una posicio valida per moure la peça seleccionada
+                    //Si es fa click a una posicio valida per moure la pe�a seleccionada
                     if (m_board.getPosValida(pRat))
                     {
-                        //Mou la peça
+                        //Mou la pe�a
                         m_board.MovePiece(m_board.getPieceSeleccionada(), pRat);
 
                         //Crea un Movement del moviment que s'acaba de fer y es guarda a m_movements
@@ -226,11 +224,11 @@ bool CurrentGame::updateAndRender(int mousePosX, int mousePosY, bool mouseStatus
                         canviaTorn();
                     }
 
-                    // Seleccionem la peça de la casella on s'ha fet click i guardem les posicions valides on es pot moure en v
+                    // Seleccionem la pe�a de la casella on s'ha fet click i guardem les posicions valides on es pot moure en v
                     m_board.setPieceSeleccionada(pRat);
                     v = m_board.GetValidMoves(pRat);
 
-                    // Carreguem les posicions valides a m_board (aixó ens mostrara els quadrats verds quan es cridi al render de pice)
+                    // Carreguem les posicions valides a m_board (aix� ens mostrara els quadrats verds quan es cridi al render de pice)
                     m_board.carregaPosValides(v);
                 }
                 // Si es fa click en una posicio que no sigui del color de qui te el torn ni una posicio valida
